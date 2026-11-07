@@ -244,7 +244,7 @@ function importWeights(text){
     const k=m[1]+"-"+m[2].padStart(2,"0")+"-"+m[3].padStart(2,"0");
     const d=S.days[k]||{entries:[],weight:null};
     if(isFat){
-      if(v>0&&v<1&&!/%|％/.test(rest))v=v*100; // 0.185 のような割合表記
+      if(v>0&&v<1)v=v*100; // 0.185 のような割合表記（%付きでも）
       if(!(v>=2&&v<=70))continue;
       S.days[k]=Object.assign({},d,{fat:r1(v)});fk.add(k);
     }else{
