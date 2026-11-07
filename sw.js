@@ -1,5 +1,5 @@
 // めしログ：オフラインでも開けるように、アプリ本体とフォントを保存しておく
-const CACHE = "meshilog-v4";
+const CACHE = "meshilog-v5";
 const SHELL = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

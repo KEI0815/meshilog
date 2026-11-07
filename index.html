@@ -234,7 +234,15 @@ function connect(){
 /* ---------- weight import (Apple Health via Shortcuts) ---------- */
 function importWeights(text){
   const t=String(text||"").normalize("NFKC");const wk=new Set(),fk=new Set();let lastW=null;
-  for(const line of t.split(/\r?\n|;/)){
+  // 値が次の行に折り返されている場合（例：「体脂肪 2026/11/02 8:14」の次の行に「17.29999」）は1行にまとめる
+  const raw=t.split(/\r?\n|;/),lines=[];
+  const DATE=/(20\d{2})\s*[-\/.年]\s*(\d{1,2})\s*[-\/.月]\s*(\d{1,2})/;
+  for(let i=0;i<raw.length;i++){let l=raw[i];
+    const dm=l.match(DATE);
+    if(dm){const after=l.slice(dm.index+dm[0].length).replace(/\d{1,2}:\d{2}(:\d{2})?/g,"");
+      if(!/\d/.test(after)&&i+1<raw.length&&!DATE.test(raw[i+1])&&/\d/.test(raw[i+1])){l+=" "+raw[i+1];i++}}
+    lines.push(l)}
+  for(const line of lines){
     const m=line.match(/(20\d{2})\s*[-\/.年]\s*(\d{1,2})\s*[-\/.月]\s*(\d{1,2})\s*日?/);
     if(!m)continue;
     const rest=line.slice(m.index+m[0].length).replace(/\d{1,2}:\d{2}(:\d{2})?/g," ");
